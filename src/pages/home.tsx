@@ -140,14 +140,8 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
             className="bg-[] flex  mb-2 gap-x-8 gap-y-9 pt-5 pl-4  overflow-x-auto whitespace-nowrap scrollbar-hide "
           >
             {data.map((item, idx) => {
-              return <SongCard item={item} idx={idx} />;
+              return <SongCard key={idx + item._id} item={item} idx={idx} />;
             })}{" "}
-            {data.map((item, idx) => {
-              return <SongCard item={item} idx={idx} />;
-            })}{" "}
-            {data.map((item, idx) => {
-              return <SongCard item={item} idx={idx} />;
-            })}
           </div>
           <Button
             size="icon"
