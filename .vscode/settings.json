@@ -1,0 +1,18 @@
+{
+    "vim.handleKeys": {
+        "<C-p>": false,
+        "<C-w>": false
+    },
+    "json.schemas": [],
+    "launch": {
+        "configurations": [],
+        "compounds": []
+    },
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["g", "r"],
+            "commands": ["editor.action.referenceSearch.trigger"]
+        }
+    ],
+    "solidity.compileUsingRemoteVersion": "v0.8.20+commit.a1b79de6"
+}
