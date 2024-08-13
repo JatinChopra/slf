@@ -90,7 +90,7 @@ const AudioControlBar = () => {
   }
   function startStreaming(songid: string, duration: number) {
     dispatch(acActions.setDuration(duration));
-    dispatch(acActions.setSrc(`https://18.119.137.31/play/${songid}`));
+    dispatch(acActions.setSrc(`https://slf-dapp-backend.onrender.com/play/${songid}`));
     dispatch(acActions.setIsPlaying(true));
   }
 
