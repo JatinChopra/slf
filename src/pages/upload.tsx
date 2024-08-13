@@ -80,7 +80,7 @@ const Upload = () => {
     try {
       // store the metadata in db
       setStatus("saving metadata in db");
-      let dbReq = await axios.post("http://18.119.137.31:443/addmetaData", {
+      let dbReq = await axios.post("https://18.119.137.31:443/addmetaData", {
         metaDataWithDuration,
       });
     } catch (e) {
