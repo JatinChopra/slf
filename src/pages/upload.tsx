@@ -80,7 +80,7 @@ const Upload = () => {
     try {
       // store the metadata in db
       setStatus("saving metadata in db");
-      let dbReq = await axios.post("http://localhost:3001/addmetaData", {
+      let dbReq = await axios.post("http://18.119.137.31:80/addmetaData", {
         metaDataWithDuration,
       });
     } catch (e) {
@@ -190,7 +190,7 @@ const Upload = () => {
     // url for the file and set it to csource
     audio.src = URL.createObjectURL(file);
 
-    audio.addEventListener("loadedmetadata", function () {
+    audio.addEventListener("loadedmetadata", function() {
       const duration = audio.duration;
       const minutes = Math.floor(duration / 60);
       const seconds = Math.floor(duration % 60);

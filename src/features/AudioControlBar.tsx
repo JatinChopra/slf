@@ -90,7 +90,7 @@ const AudioControlBar = () => {
   }
   function startStreaming(songid: string, duration: number) {
     dispatch(acActions.setDuration(duration));
-    dispatch(acActions.setSrc(`http://localhost:3001/play/${songid}`));
+    dispatch(acActions.setSrc(`http://18.119.137.31:80/play/${songid}`));
     dispatch(acActions.setIsPlaying(true));
   }
 

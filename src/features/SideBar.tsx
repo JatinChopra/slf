@@ -52,7 +52,7 @@ export const NavItems = [
   {
     icon: <PiWaveformBold className="text-2xl ml-[5px] mr-2 min-w-[50px]" />,
     text: "Feed",
-    link: "/home",
+    link: "/index",
   },
   {
     icon: <FaSearch className="text-2xl ml-[5px] mr-3  min-w-[50px]" />,

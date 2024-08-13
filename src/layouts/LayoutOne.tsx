@@ -41,7 +41,7 @@ const LayoutOne = ({ children }: { children: ReactNode }) => {
             {children}
 
             {/* box1.2.2*/}
-            {router.pathname == "/home" && <RightBar />}
+            {router.pathname == "/index" && <RightBar />}
           </div>
         </div>
         <div className="bg-orsange-500 ">{/* top bar */}</div>
