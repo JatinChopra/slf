@@ -399,7 +399,9 @@ const Upload = () => {
       >
         <DialogContent className="min-h-[320px]">
           <DialogHeader>
-            <DialogTitle>You've successfully minted an NFT</DialogTitle>
+            <DialogTitle>
+              {"NFT Creation Complete. Enjoy your masterpiece!"}
+            </DialogTitle>
             <DialogDescription className="flex h-full flex-col gap-5 items-start justify-center">
               {imageFile && (
                 <img
