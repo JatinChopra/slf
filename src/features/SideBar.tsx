@@ -124,15 +124,21 @@ const SideBar = () => {
       // className={`fixed top-0 left-0 h-full w-64 bg-[#0c0b0d] backdrop-blur-lg bg-opacity-50 shadow shadow-neutral-400 md:static md:flex md:w-64 md:block transition-transform duration-300 ease-in-out  md:translate-x-0`}
 
       // className="ml-5 max-w-[15rem]    rounded-lg bgpink-501 bg-pink500 bg-[#1b1b1b]  backdrop-blur-lg bg-opacity50 h-[99%] mdflex flex-col z-10 gap-5 py-5 max-sm:absolute sm:  top-0 left-0 shadow shadow-neutral400 "
-      className=" absolute ml-0 max-w-[15rem] border-r-purple-600 border-r-2   bgpink-501 bg-pink500 bg-[#1b1b1b]  backdrop-blur-lg bg-opacity-50 h-full mdflex flex-col z-30 gap-5 py-5 max-sm:absolute sm:  top-0 left-0 shadow shadow-neutral400 "
+      className=" absolute ml-0 max-w-[15rem] border-r-purple-600 border-r-2   bgpink-501 bg-pink500 bg-[#1b1b1b]  backdrop-blur-lg bg-opacity-50 h-full mdflex flex-col z-50 mt-[56px] gap-5 py-5 max-sm:absolute sm:  top-0 left-0 shadow shadow-neutral400 "
     >
       <div
         className="flex flex-row w-full justify-between place-items-center"
         onClick={handleOpenClose}
       >
-        <img src="/shadyLogo.svg" className=" max-w-[50px] mx-auto mb-5 ml-2" />
+        <div className="z-50 bg-blu-500 mt-[-70px] ">
+          {" "}
+          <img
+            src="/shadyLogo.svg"
+            className=" max-w-[50px] mx-auto mb-5 ml-3"
+          />
+        </div>
       </div>
-      <div className="flex flex-col gap-2 bgyellow-500 w-full">
+      <div className="flex flex-col gap-2 bgyellow-500 w-full ]">
         {NavItems.map((item, idx) => {
           return (
             <Link

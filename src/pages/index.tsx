@@ -1,7 +1,7 @@
 import React, { ReactNode, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-
+import { GoDotFill } from "react-icons/go";
 import { Button } from "@/components/ui/button";
 import LayoutOne from "@/layouts/LayoutOne";
 import axios from "axios";
@@ -76,8 +76,40 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
     }
   };
 
+  // // const circleRef = useRef<HTMLDivElement>(null);
+  // // useEffect(() => {
+  // //   const handleMouseMove = (event: MouseEvent) => {
+  // //     const circle = circleRef.current;
+  // //     if (circle) {
+  // //       // Get the circle's dimensions
+  // //       const { offsetWidth: width, offsetHeight: height } = circle;
+
+  // //       // Adjust position to center the circle at the mouse cursor
+  // //       const x = event.clientX - width / 2;
+  // //       const y = event.clientY - height / 2;
+
+  // //       // Update circle position
+  // //       circle.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  // //     }
+  // //   };
+
+  // //   // Add event listener
+  // //   document.addEventListener("mousemove", handleMouseMove);
+
+  // //   // Clean up event listener on component unmount
+  // //   return () => {
+  // //     document.removeEventListener("mousemove", handleMouseMove);
+  // //   };
+  // }, -[]);
   return (
     <>
+      {/* <div
+        ref={circleRef}
+        id="circle"
+        className="static w-[19px] h-[20px] ml-[-100px] mt-[-92px] bgwhite rondedfull one z-50 duration-500 bg-white opacity-50"
+        // className="fixed w-[200px] h-[200px] rounded-full bg-transparent border-2 border-blue-500 pointer-events-none"
+        style={{ filter: "grayscale(100%)" }}
+      ></div> */}
       <audio
         ref={audioRef}
         id="audioPlayer"
@@ -91,7 +123,9 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
           <div className="relative w-[280px] my-[5px] content-end p-5 bg-[url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f110c028-627b-4e5a-a0fc-54fd9ed17ca4/d8yebbu-5f6db196-13e1-45c1-8035-fd8072fc91f8.png/v1/fill/w_1131,h_707,q_70,strp/city_in_the_clouds_by_tatasz_d8yebbu-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTIwMCIsInBhdGgiOiJcL2ZcL2YxMTBjMDI4LTYyN2ItNGU1YS1hMGZjLTU0ZmQ5ZWQxN2NhNFwvZDh5ZWJidS01ZjZkYjE5Ni0xM2UxLTQ1YzEtODAzNS1mZDgwNzJmYzkxZjgucG5nIiwid2lkdGgiOiI8PTE5MjAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.oS3sHiLn2E0UyfD7wq77ceVobtOlOHRxHtNrm_EiJwQ')] bg-cover bg-center">
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
             <div className="relative z-10">
-              <p className="text-3xl font-bold text-white">Upload your Track</p>
+              <p className="text-3xl fontbold text-white poppins-regular">
+                Upload your Track
+              </p>
               <p className="mb-5 text-white">Add a new track</p>
               <Button
                 className="bg-white "
@@ -153,6 +187,11 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
         </div>
         {/* in case new section needed */}
         {/* <div className="bg-purple-500  h-[350px] mb-2">a</div> */}
+        <div className="bg-whte scrollbar-curstom scrollbar-hide  h-[450px] mb-2 flex gap-5 p-10 overflow-x-auto">
+          {data.map((item, idx) => {
+            return <SongCard3 key={idx + item._id} item={item} idx={idx} />;
+          })}
+        </div>
       </div>
     </>
   );
@@ -174,6 +213,83 @@ export const getServerSideProps = async () => {
     alert("Error fetching data from the db");
   }
   return { props: { data: [] } };
+};
+
+const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
+  const dispatch = useAppDispatch();
+  const [handleVisible, setHandleVisible] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  let { src, current, duration, isPlaying, songIndex } = useAppSelector(
+    (state) => state.audioController
+  );
+
+  return (
+    <div
+      className="h-[332px] min-w-[316px] overflow-hidden bg-cyan-500"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => {
+        let songid = item._id;
+        dispatch(acActions.setDuration(item.duration));
+        dispatch(acActions.setImage(item.image));
+        dispatch(acActions.setSongName(item.attributes[1].value));
+        dispatch(acActions.setArtistName(item.attributes[0].value));
+        dispatch(
+          acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`)
+        );
+        dispatch(acActions.setIsPlaying(true));
+      }}
+    >
+      <div className="relative w-full h-full">
+        <img
+          src={item.image}
+          className="w-full h-full object-cover hover:scale-125 filter gcale hover:grayscale0 duration-500"
+          alt="Sample Image"
+        />
+
+        <div className="absolute  top-0 right-0 w-10 h-10 pr-5 pt-5 bggreen-500 content-center">
+          <FaPlay
+            className={`mx-auto text-2xl duration-500 mr-5 text-white scale-0 ${
+              hovered && "scale-100"
+            }`}
+          />
+          <GoDotFill
+            className={`mx-auto text-[10px] mt-[-17px] text-white scale-100 duration-500 ${
+              hovered && "scale-0"
+            }`}
+          />
+        </div>
+
+        {/* The text background container */}
+        <div className="absolute bottom-0 ronded-lg text-white px-5 py-5 bg-gradient-to-t from-black via-transparent to-transparent w-full left-0">
+          {/* <div className="bg-green-500 overflow-hidden">
+            <p className="poppins-medium bg-orange-500 max-w-[70%] text-2xl white-space-nowrap scrolling-text ">
+              {item.attributes[1].value}
+            </p>
+          </div> */}
+          <div className="relative bggreen-500 w-full h-10 overflow-clip">
+            <div
+              className={` flex mb-[-40px] transition-transform flex-col duration-700 ease-in-out  bg-ink-500 ${
+                hovered
+                  ? "transform translate-y-[-50%]"
+                  : "transform translate-y-0"
+              }`}
+            >
+              <p className="py-2 text-2xl poppins-medium truncate">
+                {item.attributes[1].value}
+              </p>
+              <p className="py-2 text-2xl poppins-medium truncate">
+                {item.attributes[1].value}
+              </p>
+            </div>
+          </div>
+          <p className="poppins-regular text-md max-w-[70%]">
+            {item.attributes[0].value}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const SongCard = ({ item, idx }: { item: metaDataSchema; idx: number }) => {

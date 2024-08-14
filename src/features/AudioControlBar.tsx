@@ -118,7 +118,7 @@ const AudioControlBar = () => {
         controls
       ></audio>
       {src && (
-        <div className="bg-gradient-to-t z-10 border-t-[1px] shadow-lg border-purple-500 border-opacity-50 bg-reen-500 backdrop-blur-lg bg-black bg-opacity-70 flex bg-transparent w-full h-[90px] fixed bottom-0 ">
+        <div className="bg-gradient-to-t z-10 border-t-[1px] shadow-lg border-purple-500 border-opacity-80 bg-reen-500 backdrop-blur-xl bg-black bg-opacity-70 flex bg-transparent w-full h-[90px] fixed bottom-0 ">
           <div className="relative w-full overflowy-hidden">
             {/* behind */}
             <img
@@ -141,7 +141,7 @@ const AudioControlBar = () => {
               >
                 <img src={image} className="h-16 w-16 rounded-lg" />
                 <div className="bg-pnk-500 h-[70%] my-5 lg:flex flex-col gap-1 text-white justify-center bg-ellow-500 flex bg-pnk-500 max-w-[65%] md:hidden lg:w-full overflow-x-hidden">
-                  <p className="font-bold text-sm">{artistName}</p>
+                  <p className="font-bold text-sm truncate">{artistName}</p>
                   <p className="truncate font-bold max-w-[97%] bg-green500">
                     {songName}
                   </p>

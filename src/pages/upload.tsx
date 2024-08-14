@@ -410,6 +410,7 @@ const Upload = () => {
                 />
               )}
               <Link
+                target="_blank"
                 className="text-lg font-bold underline flex items-center gap-2"
                 href={
                   transactionHash.length > 0
@@ -422,6 +423,7 @@ const Upload = () => {
                 View Transaction on Ethere Scan
               </Link>
               <Link
+                target="_blank"
                 className="text-lg font-bold underline flex gap-2 items-center"
                 href={
                   toAddress.length > 1 && tokenId
