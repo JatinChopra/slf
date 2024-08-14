@@ -304,7 +304,7 @@ const Upload = () => {
         )}
       </div>
       <div className="text-nowrap flex mr-4 font-bold">
-        Audio File :{" "}
+        Image File :{" "}
         {imageFile ? (
           <p className="max-w-[280px] truncate ml-4 "> {imageFile.name}</p>
         ) : (
