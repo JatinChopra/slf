@@ -124,4 +124,29 @@
     background-size: 400% 400%;
     animation: gradient-animation 6s ease infinite;
   }
+
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap");
+
+  .gradient-text {
+    background: linear-gradient(
+      90deg,
+      #6d28d9,
+      #00b2ff
+    ); /* Purple, Cyan, Orange */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "Roboto", sans-serif;
+  }
+
+  /* .spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+  .gradient-text {
+    background: linear-gradient(90deg, #ff5733, #ffc300);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "Roboto", sans-serif;
+  } */
 }

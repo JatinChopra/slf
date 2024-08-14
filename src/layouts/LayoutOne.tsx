@@ -19,9 +19,14 @@ const LayoutOne = ({ children }: { children: ReactNode }) => {
   backdrop-blur-md pt-5 pb-24 flex h-[100vh] justify-start overflow-hidden pr-10
   moving-gradient"
       > */}
-      <div
+      {/* <div
         className="bgyellow-500 bgblack bg-[#242431 bg[#1A1A1E] bg[url(/bg.png)] bgcover
         bg-gradient-to-br from-black via-[#1a001a] to-[#661066]
+      backdrop-blur-md pt-5 pb-24 flex h-[100vh] justify-start overflow-hidden pr-10 "
+      > */}
+      <div
+        className="bgyellow-500 bgblack bg-[#242431 bg[#1A1A1E] bg[url(/bg.png)] bgcover
+      bg-black
       backdrop-blur-md pt-5 pb-24 flex h-[100vh] justify-start overflow-hidden pr-10 "
       >
         {/* serch bar container */}

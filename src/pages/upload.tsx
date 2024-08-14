@@ -10,6 +10,18 @@ import { CgSpinner } from "react-icons/cg";
 //@ts-ignore
 import web3 from "../ethereum/web3";
 import MusicNFTContract from "../ethereum/MusicNFT";
+import { isWalletConnected, connectWallet } from "../ethereum/web3";
+import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 type ipfsResData = {
   IpfsHash: string;
@@ -29,6 +41,10 @@ const Upload = () => {
   const [isuploading, setisuploading] = useState(false);
   const [isminting, setisminting] = useState(false);
   const [status, setStatus] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [transactionHash, setTransactionHash] = useState("");
+  const [toAddress, setToAddress] = useState("");
+  const [tokenId, setTokenId] = useState<undefined | number>(undefined);
 
   function createAxiosRequest(formData: FormData) {
     let axiosRequest = axios({
@@ -79,34 +95,31 @@ const Upload = () => {
     let metaDataWithDuration = { ...metaData, duration: audioDuration };
     try {
       // store the metadata in db
-      setStatus("saving metadata in db");
-      let dbReq = await axios.post("https://slf-dapp-backend.onrender.com/addmetaData", {
-        metaDataWithDuration,
-      });
+      setStatus("Saving metadata in db");
+      let dbReq = await axios.post(
+        `${process.env.NEXT_PUBLIC_API}/addmetaData`,
+        {
+          metaDataWithDuration,
+        }
+      );
+      setisuploading(() => false);
     } catch (e) {
       toast({ title: "Error : while createing a copy of metadata in db" });
     }
 
-    if (isuploading) setisuploading(false);
-
     if (uploadType == "mint") {
       try {
         // send the meta data to ipfs & get a cid
-        setStatus("uploading metadata to ipfs");
+        setStatus("Uploading metadata to IPFS");
         let response = await axios({
           method: "post",
           url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
           data: metaData,
           headers: {
-            Authorization: `Bearer ${process.env.PINATA_JWT}`,
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT}`,
             "Content-Type": "application/json",
           },
         });
-      } catch (e) {
-        toast({ title: "Error : uploading metadata to ipfs" });
-      }
-
-      try {
         setStatus("Minting NFT");
         // console.log("contract below");
         // console.log(MusicNFTContract);
@@ -121,9 +134,14 @@ const Upload = () => {
           .send({
             from: accounts[0],
           });
+        setTransactionHash(something?.transactionHash);
+        setToAddress(something?.to);
+        setTokenId(something?.type?.substring(2));
         console.log(something);
-        if (isminting) setisminting(false);
+        setisminting(false);
+        setIsDialogOpen(true);
       } catch (e) {
+        console.log(e);
         toast({
           title: "Error : calling mint function",
           description: "encountered an error while trying to mint the nft",
@@ -138,12 +156,30 @@ const Upload = () => {
     const audioformdata = new FormData();
     const imageformdata = new FormData();
 
+    if (uploadType === "mint") {
+      const walletConnected = await isWalletConnected();
+
+      if (!walletConnected) {
+        const connected = await connectWallet();
+
+        // If the wallet is still not connected, stop further execution
+        if (!connected) {
+          toast({
+            title: "Wallet Not Connected",
+            description: "Connect your wallet first",
+          });
+          // alert("Please connect your MetaMask wallet to proceed.");
+          return; // Stop further execution
+        }
+      }
+    }
+
     if (imageFile && audioFile && songName && artistName) {
       imageformdata.append("file", imageFile);
       audioformdata.append("file", audioFile);
     }
 
-    setStatus("Uploading files to ipfs");
+    setStatus("Uploading files to IPFS");
     try {
       let [audioResponse, imageResponse] = await axios.all([
         createAxiosRequest(audioformdata),
@@ -190,7 +226,7 @@ const Upload = () => {
     // url for the file and set it to csource
     audio.src = URL.createObjectURL(file);
 
-    audio.addEventListener("loadedmetadata", function() {
+    audio.addEventListener("loadedmetadata", function () {
       const duration = audio.duration;
       const minutes = Math.floor(duration / 60);
       const seconds = Math.floor(duration % 60);
@@ -296,31 +332,36 @@ const Upload = () => {
           className="bg-transparent text-xl font-bold"
         />
       </div>
+
       <Button
         variant="secondary"
-        className="sm:w-[32%]  font-bold "
+        className="sm:w-[32%] font-bold min-w-[280px] relative flex items-center justify-center overflow-hidden"
         onClick={() => {
           setisuploading(true);
           if (audioFile && imageFile && artistName && songName) {
             uploadToIPFS("normal");
           } else {
             toast({
-              title: "Drop both thumbnail & audio file",
+              title: "Drop both files & Fill all the fileds",
             });
+            setisuploading(false);
           }
         }}
       >
         {isuploading ? (
-          <div className="flex items-center gap-2 justify-start">
-            <CgSpinner className="animate-spin text-2xl" /> <p>{status}</p>
+          <div className="flex items-center gap-2 justify-start w-full">
+            <CgSpinner className="animate-spin text-2xl gradient-text " />
+            <p className="gradient-text flex-auto text-center ">{status}</p>
           </div>
         ) : (
-          "Upload"
+          <span className="gradient-text">Upload</span>
         )}
       </Button>
+
       <Button
         variant="secondary"
-        className="sm:w-[32%]   font-bold "
+        className="sm:w-[32%]   font-bold min-w-[280px]
+        "
         onClick={() => {
           setisminting(true);
           if (audioFile && imageFile && artistName && songName) {
@@ -329,18 +370,74 @@ const Upload = () => {
             toast({
               title: "Drop both thumbnail & audio file",
             });
+            setisminting(false);
           }
         }}
       >
         {" "}
         {isminting ? (
-          <div className="flex items-center gap-2 justify-start">
-            <CgSpinner className="animate-spin text-2xl" /> <p>{status}</p>
+          <div className="flex items-center gap-2 justify-start w-full">
+            <CgSpinner className="animate-spin text-2xl" />{" "}
+            <p className="gradient-text flex-auto">{status}</p>
           </div>
         ) : (
-          "Mint an NFT"
+          <span className="gradient-text">Mint an NFT</span>
         )}
       </Button>
+      {/* <Button
+        onClick={() => {
+          setIsDialogOpen((curr) => !curr);
+        }}
+      >
+        toggle dialog box
+      </Button> */}
+      <Dialog
+        open={isDialogOpen}
+        onOpenChange={(val) => {
+          setIsDialogOpen(val);
+        }}
+      >
+        <DialogContent className="min-h-[320px]">
+          <DialogHeader>
+            <DialogTitle>You've successfully minted an NFT</DialogTitle>
+            <DialogDescription className="flex h-full flex-col gap-5 items-start justify-center">
+              {imageFile && (
+                <img
+                  className="h-[240px] w-[240px] mt-10 mx-auto mb-5"
+                  src={URL.createObjectURL(imageFile)}
+                />
+              )}
+              <Link
+                className="text-lg font-bold underline flex items-center gap-2"
+                href={
+                  transactionHash.length > 0
+                    ? `https://sepolia.etherscan.io/tx/${transactionHash}`
+                    : "#"
+                }
+              >
+                <FaExternalLinkAlt />
+                <img src="/etherscan.png" className="h-8 w-7" />
+                View Transaction on Ethere Scan
+              </Link>
+              <Link
+                className="text-lg font-bold underline flex gap-2 items-center"
+                href={
+                  toAddress.length > 1 && tokenId
+                    ? `https://testnets.opensea.io/assets/sepolia/${toAddress}/${tokenId}`
+                    : "#"
+                }
+              >
+                <FaExternalLinkAlt />
+                <img
+                  src="https://testnets.opensea.io/static/images/logos/opensea-logo.svg"
+                  className="w-6 h-6"
+                />
+                View NFT on OpenSea
+              </Link>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

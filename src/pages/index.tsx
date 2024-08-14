@@ -59,7 +59,7 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
   function startStreaming(songid: string, duration: number) {
     console.log(songid);
     dispatch(acActions.setDuration(duration));
-    dispatch(acActions.setSrc(`https://slf-dapp-backend.onrender.com/play/${songid}`));
+    dispatch(acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`));
 
     dispatch(acActions.setIsPlaying(true));
   }
@@ -166,7 +166,7 @@ Home.getLayout = function getLayout(page: ReactNode) {
 
 export const getServerSideProps = async () => {
   // Fetch data from external API
-  let response = await axios.get("https://slf-dapp-backend.onrender.com/getmetaData");
+  let response = await axios.get(`${process.env.NEXT_PUBLIC_API}/getmetaData`);
   if (response.status == 200) {
     let arrayData: metaDataSchema[] = response.data as metaDataSchema[];
     return { props: { data: arrayData } };
@@ -194,7 +194,9 @@ const SongCard = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
           dispatch(acActions.setImage(item.image));
           dispatch(acActions.setSongName(item.attributes[1].value));
           dispatch(acActions.setArtistName(item.attributes[0].value));
-          dispatch(acActions.setSrc(`https://slf-dapp-backend.onrender.com/play/${songid}`));
+          dispatch(
+            acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`)
+          );
           dispatch(acActions.setIsPlaying(true));
         }}
       >
@@ -238,7 +240,9 @@ const SongCard2 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
           dispatch(acActions.setImage(item.image));
           dispatch(acActions.setSongName(item.attributes[1].value));
           dispatch(acActions.setArtistName(item.attributes[0].value));
-          dispatch(acActions.setSrc(`https://slf-dapp-backend.onrender.com/play/${songid}`));
+          dispatch(
+            acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`)
+          );
           dispatch(acActions.setIsPlaying(true));
         }}
       >
