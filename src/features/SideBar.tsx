@@ -62,7 +62,7 @@ export const NavItems = [
   {
     icon: <MdExplore className="text-2xl ml-[5px] mr-3  min-w-[50px]" />,
     text: "Browse",
-    link: "/browse",
+    link: "/track",
   },
   {
     icon: <PiPlaylistBold className="text-2xl ml-[5px] mr-3  min-w-[50px]" />,

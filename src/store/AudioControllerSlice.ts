@@ -1,6 +1,6 @@
 // src/slices/audioControllerSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { metaDataSchema } from "@/pages";
+import { metaDataSchema } from "./SongDataSlice";
 interface AudioControllerState {
   songName: string;
   artistName: string;

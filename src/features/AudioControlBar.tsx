@@ -46,9 +46,12 @@ const AudioControlBar = () => {
   useEffect(() => {
     const audioPlayer = audioRef.current;
 
+    console.log("in state" + current);
+    console.log("in player" + audioPlayer?.currentTime);
     const handleTimeUpdate = () => {
       if (audioPlayer && sliderRef.current) {
         // setCurrent(audioPlayer.currentTime);
+        console.log("Set current called by handletimeupdate useeffect hook");
         dispatch(acActions.setCurrent(audioPlayer.currentTime));
         // Set slider value if it's not already being interacted with
         (sliderRef.current as any).value = audioPlayer.currentTime;
@@ -68,14 +71,12 @@ const AudioControlBar = () => {
     };
   }, [isPlaying]);
 
-  function formatDuration(seconds: number) {
+  const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    // Pad the seconds with a leading zero if necessary
-    const formattedSeconds =
-      remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-    return `${minutes}:${formattedSeconds}`;
-  }
+    const secondsRemainder = Math.round(seconds) % 60;
+    const paddedSeconds = `0${secondsRemainder}`.slice(-2);
+    return `${minutes}:${paddedSeconds}`;
+  };
 
   function toggleAudio(): void {
     if (isPlaying) {
@@ -118,7 +119,7 @@ const AudioControlBar = () => {
         controls
       ></audio>
       {src && (
-        <div className="bg-gradient-to-t z-10 border-t-[1px] shadow-lg border-purple-500 border-opacity-80 bg-reen-500 backrop-blur-xl bg-black bg-opacity70 flex bg-transparent w-full h-[90px] fixed bottom-0 ">
+        <div className="bg-gradient-to-t z-10 border-t-[1px] shadow-lg border-500 border-opacity-80 bg-reen-500 backrop-blur-xl bg-black bg-opacity-70 flex  w-full h-[90px] fixed bottom-0 ">
           <div className="relative w-full overflowy-hidden">
             {/* behind */}
             <img
@@ -203,6 +204,7 @@ const AudioControlBar = () => {
                 }}
                 onClickCapture={() => {
                   if (audioRef.current) audioRef.current.play();
+                  dispatch(acActions.setIsPlaying(true));
                 }}
                 onValueChange={(val) => {
                   // setCurrent(val[0]);
@@ -228,6 +230,7 @@ const AudioControlBar = () => {
                   }}
                   onClickCapture={() => {
                     if (audioRef.current) audioRef.current.play();
+                    dispatch(acActions.setIsPlaying(true));
                   }}
                   onValueChange={(val) => {
                     // setCurrent(val[0]);

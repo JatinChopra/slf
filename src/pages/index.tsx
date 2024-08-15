@@ -131,7 +131,7 @@ export const getServerSideProps = async () => {
 
 const RightBar = () => {
   return (
-    <div className="scrollbar-custom scrollbar-hide overflow-y-scroll bgcyan-500  px-2 mb-[195px]  flex-shrink-0  duration-500 lg:w-[480px] w-0  mt-[2px]  scale-x-0 lg:scale-100">
+    <div className="scrollbar-custom scrollbar-hide overflow-y-scroll bgcyan-500  px-2 mb-[195px] flex flex-col items-center flex-no-wrap  flex-shrink-0  duration-500  lg:w-[440px] w-0  mt-[2px]  scale-x-0 lg:scale-100 border-l-2 bgcyan-500 ml-5">
       <div className="w-full h-[400px] flex flex-col bggreen-500  py-2">
         <SideBarCard type="artists" />
       </div>
