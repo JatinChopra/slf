@@ -10,34 +10,11 @@ import { Slider } from "@/components/ui/slider";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { audioControllerSliceActions as acActions } from "@/store/AudioControllerSlice";
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-
 import { FaChevronLeft, FaChevronRight, FaPlay } from "react-icons/fa";
-import { Router } from "lucide-react";
-
-export type metaDataSchema = {
-  _id: string;
-  name: string;
-  description: string;
-  duration: number;
-  image: string;
-  attributes: [
-    {
-      trait_type: string;
-      value: string;
-    },
-    {
-      trait_type: string;
-      value: string;
-    }
-  ];
-};
+import { metaDataSchema } from "@/store/SongDataSlice";
+import { IoMdCalendar, IoMdHeart, IoMdPeople, IoMdPlay } from "react-icons/io";
+import { PiWaveformBold } from "react-icons/pi";
+import Link from "next/link";
 
 const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
   const router = useRouter();
@@ -45,7 +22,6 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
 
   const [handleVisible, setHandleVisible] = useState(false);
 
-  const scrollBarOneRef = useRef<HTMLDivElement>(null);
   let { current, duration, isPlaying, songIndex } = useAppSelector(
     (state) => state.audioController
   );
@@ -64,52 +40,52 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
     dispatch(acActions.setIsPlaying(true));
   }
 
-  const scrollLeft = () => {
-    if (scrollBarOneRef.current) {
-      scrollBarOneRef.current.scrollBy({ left: -200, behavior: "smooth" });
-    }
-  };
+  const circleRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const circle = circleRef.current;
+      if (circle) {
+        // Get the circle's dimensions
+        const { offsetWidth: width, offsetHeight: height } = circle;
 
-  const scrollRight = () => {
-    if (scrollBarOneRef.current) {
-      scrollBarOneRef.current.scrollBy({ left: 200, behavior: "smooth" });
-    }
-  };
+        // Adjust position to center the circle at the mouse cursor
+        const x = event.clientX - width / 2;
+        const y = event.clientY - height / 2;
 
-  // // const circleRef = useRef<HTMLDivElement>(null);
-  // // useEffect(() => {
-  // //   const handleMouseMove = (event: MouseEvent) => {
-  // //     const circle = circleRef.current;
-  // //     if (circle) {
-  // //       // Get the circle's dimensions
-  // //       const { offsetWidth: width, offsetHeight: height } = circle;
+        // Update circle position
+        circle.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      }
+    };
 
-  // //       // Adjust position to center the circle at the mouse cursor
-  // //       const x = event.clientX - width / 2;
-  // //       const y = event.clientY - height / 2;
+    // Add event listener
+    document.addEventListener("mousemove", handleMouseMove);
 
-  // //       // Update circle position
-  // //       circle.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-  // //     }
-  // //   };
-
-  // //   // Add event listener
-  // //   document.addEventListener("mousemove", handleMouseMove);
-
-  // //   // Clean up event listener on component unmount
-  // //   return () => {
-  // //     document.removeEventListener("mousemove", handleMouseMove);
-  // //   };
-  // }, -[]);
+    // Clean up event listener on component unmount
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
   return (
     <>
       {/* <div
         ref={circleRef}
         id="circle"
-        className="static w-[19px] h-[20px] ml-[-100px] mt-[-92px] bgwhite rondedfull one z-50 duration-500 bg-white opacity-50"
-        // className="fixed w-[200px] h-[200px] rounded-full bg-transparent border-2 border-blue-500 pointer-events-none"
-        style={{ filter: "grayscale(100%)" }}
-      ></div> */}
+        className="fixed w-16 h-16 pointer-events-none z-50 transform  mix-blenddifference
+        mt-[-121px] ml-[-95px] backdrop-contrast- backdrop-grayscale mix-blend-overlay
+        "
+      >
+        <div className="absolute inset-0 rounded-full bg-black filter grayscale "></div>
+      </div> */}
+      {/* <div
+        ref={circleRef}
+        id="circle"
+        className="fixed w-16 h-16 pointer-events-none z-50 transform
+    mt-[-121px] ml-[-95px] mix-blend-color-dodge shadow-2xl backdrop-filter
+     backdrop-brightness-150  backdrop-saturate-200"
+      >
+        <div className="absolute inset-0 rounded-full bg-gradient-radial from-purple-500 via-pink-500 to-red-500 animate-pulse"></div>
+      </div> */}
+
       <audio
         ref={audioRef}
         id="audioPlayer"
@@ -117,81 +93,19 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
         controls
       ></audio>
 
-      <div className="bgorange-500 p-2 pb-28 gap-2 flex-auto  flex-nowrap overflow-y-scroll scrollbar-custom scrollbar-hide h-full ">
-        {/* Section 1 */}
-        <div className="bgpurple-500  h-[350px] mb-2 flex gap-5">
-          <div className="relative w-[280px] my-[5px] content-end p-5 bg-[url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f110c028-627b-4e5a-a0fc-54fd9ed17ca4/d8yebbu-5f6db196-13e1-45c1-8035-fd8072fc91f8.png/v1/fill/w_1131,h_707,q_70,strp/city_in_the_clouds_by_tatasz_d8yebbu-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTIwMCIsInBhdGgiOiJcL2ZcL2YxMTBjMDI4LTYyN2ItNGU1YS1hMGZjLTU0ZmQ5ZWQxN2NhNFwvZDh5ZWJidS01ZjZkYjE5Ni0xM2UxLTQ1YzEtODAzNS1mZDgwNzJmYzkxZjgucG5nIiwid2lkdGgiOiI8PTE5MjAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.oS3sHiLn2E0UyfD7wq77ceVobtOlOHRxHtNrm_EiJwQ')] bg-cover bg-center">
-            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-            <div className="relative z-10">
-              <p className="text-3xl fontbold text-white poppins-regular">
-                Upload your Track
-              </p>
-              <p className="mb-5 text-white">Add a new track</p>
-              <Button
-                className="bg-white "
-                onClick={() => {
-                  router.push("/upload");
-                }}
-              >
-                <p className="px-6 py-2.5 font-bold text-black  transition-all duration-300 ease-in-out bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 bg-clip-text text-transparent hover:bg-gradient-to-r hover:from-pink-500 hover:via-purple-500 hover:to-cyan-500 rounded-lg ">
-                  Upload
-                </p>
-              </Button>
-            </div>
-          </div>
-
-          <div className="relative text-white bg-[url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f110c028-627b-4e5a-a0fc-54fd9ed17ca4/db6lkxe-8cf62586-a499-4278-94b2-00603a2f59fb.png/v1/fill/w_1095,h_730,q_70,strp/waves_by_tatasz_db6lkxe-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2YxMTBjMDI4LTYyN2ItNGU1YS1hMGZjLTU0ZmQ5ZWQxN2NhNFwvZGI2bGt4ZS04Y2Y2MjU4Ni1hNDk5LTQyNzgtOTRiMi0wMDYwM2EyZjU5ZmIucG5nIiwid2lkdGgiOiI8PTE5MjAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.Zuf5mvwo8EvZPWIIhWH2EnCF6binnTgXpuCaa9spEE4')] w-[280px] my-[5px] flex-auto p-5 content-end">
-            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-            <div className="relative z-10">
-              <p className="text-3xl font-bold">Create NFT</p>
-              <p className="mb-5">Mint an NFT</p>
-              <Button
-                className="bg-white "
-                onClick={() => {
-                  router.push("/upload");
-                }}
-              >
-                <p className="px-6 py-2.5 font-bold text-black  transition-all duration-300 ease-in-out bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 bg-clip-text text-transparent hover:bg-gradient-to-r hover:from-pink-500 hover:via-purple-500 hover:to-cyan-500 rounded-lg ">
-                  Mint Now
-                </p>
-              </Button>
-            </div>
-          </div>
+      {/* left section */}
+      {/* right bar */}
+      <div className="bgorange-500 p-2 mb-20 pb-[40px] gap-2 flex overflow-y-scroll scrollbar-custom scrollbar-hide h-full max-w-full box-border">
+        <div className="flex-grow overflow-x-hidden bgpurple-500 scrollbar-hide mb-[195px]">
+          {/* Section 1 */}
+          <Banners />
+          <p className="bggreen-500  text-white font-bold text-2xl mt-7">
+            Recommendations for you
+          </p>
+          <HorizontalSongsScroller data={data} />
         </div>
-        <p className="bg--500 text-white font-bold text-2xl mt-7">
-          Recommendations for you
-        </p>
-        <div className="relative flex justify-center items-center  bg-range-500 bg[#161A1F] rounded-lg mb-2  gap-y-9  pl-4 overflow-x-hidden whitespace-nowrap scrollbar-hide wstart -full">
-          <Button
-            size="icon"
-            onClick={scrollLeft}
-            className="bg-white hover:bg-white opacity-40 hover:opacity-50 backdrop-blur-2xl  absolute z-20 left-0 text-2xl "
-          >
-            <FaChevronLeft className="text-black opacity-100" />
-          </Button>
-          <div
-            ref={scrollBarOneRef}
-            className="bg-[] flex  mb-2 gap-x-8 gap-y-9 pt-5 pl-4  overflow-x-auto whitespace-nowrap scrollbar-hide "
-          >
-            {data.map((item, idx) => {
-              return <SongCard key={idx + item._id} item={item} idx={idx} />;
-            })}{" "}
-          </div>
-          <Button
-            size="icon"
-            onClick={scrollRight}
-            className="bg-white hover:bg-white opacity-40 hover:opacity-50 backdrop-blur-2xl  absolute z-20 right-0 text-2xl "
-          >
-            <FaChevronRight className="text-black opacity-100" />
-          </Button>
-        </div>
-        {/* in case new section needed */}
-        {/* <div className="bg-purple-500  h-[350px] mb-2">a</div> */}
-        <div className="bg-whte scrollbar-curstom scrollbar-hide  h-[450px] mb-2 flex gap-5 p-10 overflow-x-auto">
-          {data.map((item, idx) => {
-            return <SongCard3 key={idx + item._id} item={item} idx={idx} />;
-          })}
-        </div>
+        {/* Sidebar for home screen */}
+        <RightBar />
       </div>
     </>
   );
@@ -215,6 +129,212 @@ export const getServerSideProps = async () => {
   return { props: { data: [] } };
 };
 
+const RightBar = () => {
+  return (
+    <div className="scrollbar-custom scrollbar-hide overflow-y-scroll bgcyan-500  px-2 mb-[195px]  flex-shrink-0  duration-500 lg:w-[480px] w-0  mt-[2px]  scale-x-0 lg:scale-100">
+      <div className="w-full h-[400px] flex flex-col bggreen-500  py-2">
+        <SideBarCard type="artists" />
+      </div>
+      <div className="w-full h-[400px] mt-7 flex flex-col bggreen-500  py-2">
+        <SideBarCard type="history" />
+      </div>
+    </div>
+  );
+};
+
+const SideBarCard = ({ type }: { type: "artists" | "history" }) => {
+  return (
+    <>
+      {/* heading */}
+      <div className="bgyellow-500 border-bottom-[1px] mb-2 h-[40px] content-end px-2 py-1 text-lg text-white">
+        {type == "artists" ? (
+          <div className="border-b-[1px] pb-2 flex justify-between  border-gray-400">
+            {" "}
+            <div className="flex gap-2">
+              <IoMdPeople className="text-2xl" />
+              <p className="">Artists you should follow</p>
+            </div>
+          </div>
+        ) : (
+          <div className="border-b-[1px] pb-2 flex justify-between  border-gray-400">
+            {" "}
+            <div className="flex gap-2">
+              <IoMdCalendar className="text-2xl" />
+              <p className="">Your listening history</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 3 item list */}
+      <div className="flex flex-col gap-3 h-full b-blue-500 ">
+        {new Array(4).fill(0).map((_, index) => {
+          return (
+            <>
+              {type == "artists" ? (
+                <ArtistSideBarCardItem index={index} />
+              ) : (
+                <HistorySideBarCardItem index={index} />
+              )}
+            </>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
+const HistorySideBarCardItem = ({ index }: { index: number }) => {
+  return (
+    <div
+      key={index}
+      className="bg-range-500 gap-2 px-2 items-center flex-grow py-2 flex"
+    >
+      <img
+        src="https://picsum.photos/200"
+        className="b-pink-500 w-[70px] h-[70px] bg-cover "
+      />
+      <div className="bg-ellow-500 w-3/4">
+        <div className="w-full truncate font-semibold text-gray-300 ">
+          Artist Singer
+        </div>
+        <div className="w-full truncate text-lg text-white">
+          Song Name Goes Here What do you say
+        </div>
+        <div className="flex text-gray-400 gap-2">
+          <Link href={"#"} className="flex items-center gap-1">
+            <IoMdPlay /> 4,123
+          </Link>
+          <Link href={"#"} className="flex items-center gap-1">
+            <IoMdHeart /> 81
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ArtistSideBarCardItem = ({ index }: { index: number }) => {
+  return (
+    <div
+      key={index}
+      className="bgorange-500 gap-2 px-2 items-center flex-grow py-2 flex"
+    >
+      <img
+        src="https://picsum.photos/200"
+        className="b-pink-500 w-[60px] h-[60px] bg-cover rounded-full"
+      />
+      <div className="bgyellow-500 w-2/4 text-white">
+        <div className="w-[88%] truncate text-lg ">
+          Artist Name Goes Here What do you say
+        </div>
+        <div className="flex text-gray-400 gap-2">
+          <Link href={"#"} className="flex items-center gap-1">
+            <IoMdPeople className="text-2xl" /> 4,123
+          </Link>
+          <Link href={"#"} className="  flex items-center gap-1">
+            <PiWaveformBold className="text-xl" /> 81
+          </Link>
+        </div>
+      </div>
+      <div className="bgpink-500 w-1/4 h-full flex justify-end items-end">
+        <Button
+          className="bg-transparent border-gray-500 border-[1px] h-[32px] w-full hover:bg-transparent hover:border-gray-300"
+          size="sm"
+        >
+          Follow
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const Banners = () => {
+  const router = useRouter();
+  return (
+    <div className="bgpurple-500 relative h-[350px] mb-2 flex gap-5">
+      <div className="relative w-[280px] my-[5px] content-end p-5 bg-[url('/abstractBg1.jpg')] bg-cover bg-center">
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+        <div className="relative z-10">
+          <p className="text-3xl fontbold text-white poppins-regular">
+            Upload your Track
+          </p>
+          <p className="mb-5 text-white">Add a new track</p>
+          <Button
+            className="bg-white "
+            onClick={() => {
+              router.push("/upload");
+            }}
+          >
+            <p className="btn-mint">Upload</p>
+          </Button>
+        </div>
+      </div>
+
+      <div className="relative text-white bg-[url('/abstractBg2.jpg')] w-[280px] my-[5px] flex-auto p-5 content-end">
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+        <div className="relative z-10">
+          <p className="text-3xl font-bold">Create NFT</p>
+          <p className="mb-5">Mint an NFT</p>
+          <Button
+            className="bg-white "
+            onClick={() => {
+              router.push("/upload");
+            }}
+          >
+            <p className="btn-mint ">Mint Now</p>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HorizontalSongsScroller = ({ data }: { data: metaDataSchema[] }) => {
+  const scrollBarOneRef = useRef<HTMLDivElement>(null);
+  const scrollLeft = () => {
+    if (scrollBarOneRef.current) {
+      scrollBarOneRef.current.scrollBy({ left: -800, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    console.log("movring right ");
+    console.log(scrollBarOneRef);
+    if (scrollBarOneRef.current) {
+      scrollBarOneRef.current.scrollBy({ left: 800, behavior: "smooth" });
+    }
+  };
+  return (
+    <div className="relative flex justify-center items-center  bgorange-500 bg-#161A1F] rounded-lg mb-2    pl-4  pr-4 overflow-x-hidden whitespace-nowrap  wstart -full">
+      <Button
+        size="icon"
+        onClick={scrollLeft}
+        className="bg-white hover:bg-white opacity-41 hover:opacity-50 backdrop-blur-2xl  absolute z-20 left-0 text-2xl "
+      >
+        <FaChevronLeft className="text-black opacity-101" />
+      </Button>
+      <div
+        ref={scrollBarOneRef}
+        className="bgwhite scrollbar-curstom py-6 mb-2 flex gap-5 items-center 
+            overflow-x-auto whitespace-nowrap scrollbar-hide  
+            "
+      >
+        {data.map((item, idx) => {
+          return <SongCard3 key={idx + item._id} item={item} idx={idx} />;
+        })}
+      </div>
+      <Button
+        size="icon"
+        onClick={scrollRight}
+        className="bg-white hover:bg-white opacity-41 hover:opacity-50 backdrop-blur-2xl  absolute z-20 right-0 text-2xl "
+      >
+        <FaChevronRight className="text-black opacity-101" />
+      </Button>
+    </div>
+  );
+};
+
 const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
   const dispatch = useAppDispatch();
   const [handleVisible, setHandleVisible] = useState(false);
@@ -225,7 +345,7 @@ const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
 
   return (
     <div
-      className="h-[332px] min-w-[316px] overflow-hidden bg-cyan-500"
+      className="h-[332px] min-w-[316px] overflow-hidden bg-gray-500"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => {
@@ -262,11 +382,6 @@ const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
 
         {/* The text background container */}
         <div className="absolute bottom-0 ronded-lg text-white px-5 py-5 bg-gradient-to-t from-black via-transparent to-transparent w-full left-0">
-          {/* <div className="bg-green-500 overflow-hidden">
-            <p className="poppins-medium bg-orange-500 max-w-[70%] text-2xl white-space-nowrap scrolling-text ">
-              {item.attributes[1].value}
-            </p>
-          </div> */}
           <div className="relative bggreen-500 w-full h-10 overflow-clip">
             <div
               className={` flex mb-[-40px] transition-transform flex-col duration-700 ease-in-out  bg-ink-500 ${
@@ -284,97 +399,6 @@ const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
             </div>
           </div>
           <p className="poppins-regular text-md max-w-[70%]">
-            {item.attributes[0].value}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const SongCard = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
-  const dispatch = useAppDispatch();
-
-  const [handleVisible, setHandleVisible] = useState(false);
-
-  let { src, current, duration, isPlaying, songIndex } = useAppSelector(
-    (state) => state.audioController
-  );
-  return (
-    <div className="w-[210px]  bggreen-500 rounded-md">
-      <div
-        className="relative w-[210px] h-[210px] rounded-lg overflow-hidden"
-        onClick={() => {
-          let songid = item._id;
-          dispatch(acActions.setDuration(item.duration));
-          dispatch(acActions.setImage(item.image));
-          dispatch(acActions.setSongName(item.attributes[1].value));
-          dispatch(acActions.setArtistName(item.attributes[0].value));
-          dispatch(
-            acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`)
-          );
-          dispatch(acActions.setIsPlaying(true));
-        }}
-      >
-        <img
-          src={item.image}
-          className="w-full h-full object-cover"
-          alt="Image description"
-        />
-        <div className="absolute cursor-pointer flex items-center justify-center inset-0 bg-gradient-to-t from-black to-transparent opacity-0 hover:opacity-80 transition-opacity duration-300">
-          <FaPlay className="text-5xl text-white" />
-        </div>
-
-        {/* <div className="absolute bg-green-500  inset-0 m-auto text-white opacity-0 hover:opacity-100 transition-opacity duration-300 w-[90%] h-[90%]">
-          <FaPlay />
-        </div> */}
-      </div>
-
-      <p className="font-bold text-white truncate mt-3">{item.name}</p>
-      <p className="text-gray-500 font-bold text-sm">
-        {item.attributes[0].value}
-      </p>
-    </div>
-  );
-};
-
-const SongCard2 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
-  const dispatch = useAppDispatch();
-  const [handleVisible, setHandleVisible] = useState(false);
-
-  let { src, current, duration, isPlaying, songIndex } = useAppSelector(
-    (state) => state.audioController
-  );
-
-  return (
-    <div className="min-w[220px] min-w-[208px] rounded-2xl overflow-hidden shadow- ">
-      <div
-        className="relative w220px] w-[208px] h-[216px] rounded-[18%]   overflow-hidden group"
-        onClick={() => {
-          let songid = item._id;
-          dispatch(acActions.setDuration(item.duration));
-          dispatch(acActions.setImage(item.image));
-          dispatch(acActions.setSongName(item.attributes[1].value));
-          dispatch(acActions.setArtistName(item.attributes[0].value));
-          dispatch(
-            acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`)
-          );
-          dispatch(acActions.setIsPlaying(true));
-        }}
-      >
-        <img
-          src={item.image}
-          className="w-full h-full object-cover"
-          alt="Album cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <FaPlay className="text-5xl text-white" />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 py-2 px-4 mb-2  w-[80%] rounded-2xl mx-auto bg-black backdrop-blur-lg h-[25%] flex flex-col justify-center bg-opacity-[1%]  ">
-          <p className="font-bold text-white text-sm truncate mb-[2px]">
-            {item.attributes[1].value}
-          </p>
-          <p className="text-gray-300 text-xs truncate ">
             {item.attributes[0].value}
           </p>
         </div>

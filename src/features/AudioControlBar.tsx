@@ -118,7 +118,7 @@ const AudioControlBar = () => {
         controls
       ></audio>
       {src && (
-        <div className="bg-gradient-to-t z-10 border-t-[1px] shadow-lg border-purple-500 border-opacity-80 bg-reen-500 backdrop-blur-xl bg-black bg-opacity-70 flex bg-transparent w-full h-[90px] fixed bottom-0 ">
+        <div className="bg-gradient-to-t z-10 border-t-[1px] shadow-lg border-purple-500 border-opacity-80 bg-reen-500 backrop-blur-xl bg-black bg-opacity70 flex bg-transparent w-full h-[90px] fixed bottom-0 ">
           <div className="relative w-full overflowy-hidden">
             {/* behind */}
             <img

@@ -1,20 +1,17 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import LayoutOne from "@/layouts/LayoutOne";
+const CircleDesaturate = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-const Search = () => {
-  const [handleVisible, setHandleVisible] = useState(false);
   return (
-    <>
-      <p className="text-xl text-white bg-green-500 h-[500px] w-[800px] mt-10 ml-40">
-        Hello this is search page
-      </p>
-    </>
+    <div className="relative h-screen w-full flex items-center justify-center ">
+      <div className="bg-black w-[50%] h-full abslute top-0  backdrop-blur-lg opacity-20 border-r-2 border-"></div>
+      <div className="grainy-bg absolute inset-0 z-[-1]"></div>
+      <div className="relative p-10 bg-white bg-opacity-75 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold">Your Content Here</h1>
+      </div>
+    </div>
   );
 };
 
-export default Search;
-
-Search.getLayout = function getLayout(page: ReactNode) {
-  return <LayoutOne>{page}</LayoutOne>;
-};
+export default CircleDesaturate;

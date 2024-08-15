@@ -14,22 +14,9 @@ const LayoutOne = ({ children }: { children: ReactNode }) => {
   let router = useRouter();
   return (
     <>
-      {/* <div className="custom-bg pt-5 pb-24 flex h-[100vh] justify-start overflow-hidden pr-10 custom-moving-gradient"> */}
-      {/* <div
-        className="bgyellow-500 bgblack bg-[#242431] bg[#1A1A1E] bg[url(/bg.png)] bgcover
-  bg-gradient-to-br from-black via-[#1a001a] to-[#661066]
-  backdrop-blur-md pt-5 pb-24 flex h-[100vh] justify-start overflow-hidden pr-10
-  moving-gradient"
-      > */}
-      {/* <div
-        className="bgyellow-500 bgblack bg-[#242431 bg[#1A1A1E] bg[url(/bg.png)] bgcover
-        bg-gradient-to-br from-black via-[#1a001a] to-[#661066]
-      backdrop-blur-md pt-5 pb-24 flex h-[100vh] justify-start overflow-hidden pr-10 "
-      > */}
       <div
-        className="bg-ellow-500 bgblack bg-[#242431 bg[#1A1A1E] bg[url(/bg.png)] bgcover
-      bg-black
-      backdrop-blur-md pt-5 pb-24 flex h-[100vh] justify-start overflow-hidden pr-10 "
+        className="bgyellow-500  bg[#242431] bg-[#1f162f] bg[#1A1A1E] bg[url(/bg.png)] bgcover
+      backdrop-blur-md pt-5 pb- flex h-[100vh] justify-start overflow-hidden pr-10 "
       >
         {/* serch bar container */}
 
@@ -45,7 +32,7 @@ const LayoutOne = ({ children }: { children: ReactNode }) => {
           {/* this will work like heading cool */}
           {router.pathname == "/" && <GenresHorizontalScroller />}
           {/* box 1.2 */}
-          <div className="bgcyan-500  px-5 gap-5 flex flex-auto w-[99%] h-[110%] ">
+          <div className="bg-yan-500  px-5 gap-5 flex flex-auto w-[99%] h-[110%] ">
             {/* box1.2.1*/}
             {children}
 
@@ -73,24 +60,7 @@ const RightBar = () => {
 
 const GenresHorizontalScroller = () => {
   return (
-    // <div className="bg-pink500 px-7 pr-10 min-h-[57px] duration-700 gap-3 items-center flex overflow-x-scroll scrollbar-custom scrollbar-hide">
-    //   <div className="bg-[#161A1F] border-[1px] font-bold px-2 border-purple-500 min-w-[70px] h-[30px] rounded-md text-gray-300 text-center content-center text-sm">
-    //     All
-    //   </div>
-    //   {genres.genres.map((item: string, idx) => {
-    //     return (
-    //       <>
-    //         <div
-    //           key={idx}
-    //           className="bg-[#161A1F] border-[1px] font-bold px-2 border-gray-400  h-[30px] rounded-md text-gray-300 text-center content-center text-sm"
-    //         >
-    //           {item.charAt(0).toUpperCase() + item.substring(1)}
-    //         </div>
-    //       </>
-    //     );
-    //   })}
-    // </div>
-    <div className="bg-pink500 px-7 bg-[#161A1F] pr-10 min-h-[57px] duration-700 gap-3 items-center flex mr-12 overflow-x-scroll scrollbar-custom scrollbar-hide">
+    <div className="bgpink-500 px-7 bg-[#161A1F] pr-10 min-h-[57px] duration-700 gap-3 items-center flex mr-12 overflow-x-scroll scrollbar-custom scrollbar-hide">
       <div className="bg-[#161A1F] border-[1px] font-bold px-2 py-1 border-purple-500 h-[30px] rounded-md text-gray-300 text-center text-sm flex-shrink-0">
         All
       </div>
@@ -127,13 +97,6 @@ const TopBar = () => {
         </div>
       </div>
       <div>
-        {/* <Button
-                size="lg"
-                className="bg-purple-pink bg-gradient-to-r from-purple-600 to-[90%] to-indigo-800 font-bold rounded-full ring ring-white ring-offset-1 ring-offset-black border-4 border-black text-lg  hover:from-purple-400 hover:to-indigo-700"
-              >
-                Join as Artist
-              </Button> */}
-
         <Button
           size="sm"
           className="relative inline-block h-[30px] font-bold text-white bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent rounded-md overflow-hidden"
