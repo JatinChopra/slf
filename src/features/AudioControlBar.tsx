@@ -16,6 +16,7 @@ import { FaHeart } from "react-icons/fa";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { audioControllerSliceActions as acActions } from "@/store/AudioControllerSlice";
 import { Console } from "console";
+import { metaDataSchema } from "@/store/SongDataSlice";
 
 const AudioControlBar = () => {
   const dispatch = useAppDispatch();
@@ -89,9 +90,19 @@ const AudioControlBar = () => {
       // setIsPlaying(true);
     }
   }
-  function startStreaming(songid: string, duration: number) {
+  function startStreaming(data: metaDataSchema) {
     dispatch(acActions.setDuration(duration));
-    dispatch(acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`));
+    dispatch(
+      acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${data._id}`)
+    );
+    dispatch(acActions.setIsPlaying(true));
+
+    dispatch(acActions.setImage(data.image));
+    dispatch(acActions.setSongName(data.attributes[1].value));
+    dispatch(acActions.setArtistName(data.attributes[0].value));
+    // dispatch(acActions.setSongIndex(idx));
+
+    // dispatch(acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`));
     dispatch(acActions.setIsPlaying(true));
   }
 
@@ -100,14 +111,15 @@ const AudioControlBar = () => {
     // setSongIndex(songidx);
     dispatch(acActions.setSongIndex(songidx));
     let songDuration = data[songidx].duration;
-    startStreaming(data[songidx]._id, data[songidx].duration);
+    startStreaming(data[songidx]);
   }
 
   function playPrev() {
+    console.log("Play prev called");
     let songidx = (songIndex - 1 + data.length) % data.length;
     dispatch(acActions.setSongIndex(songidx));
     let songDuration = data[songidx].duration;
-    startStreaming(data[songidx]._id, data[songidx].duration);
+    startStreaming(data[songidx]);
   }
 
   return (

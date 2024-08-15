@@ -354,6 +354,7 @@ const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
         dispatch(acActions.setImage(item.image));
         dispatch(acActions.setSongName(item.attributes[1].value));
         dispatch(acActions.setArtistName(item.attributes[0].value));
+        dispatch(acActions.setSongIndex(idx));
         dispatch(
           acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${songid}`)
         );

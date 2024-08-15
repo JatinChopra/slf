@@ -30,6 +30,7 @@ const audioControllerSlice = createSlice({
   initialState,
   reducers: {
     setSongIndex(state, action: PayloadAction<number>) {
+      console.log("form the state");
       state.songIndex = action.payload;
     },
     setIsPlaying(state, action: PayloadAction<boolean>) {
