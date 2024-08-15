@@ -1,20 +1,27 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { ReactNode, FC, useRef } from "react";
-import { Provider } from "react-redux"; // Import Provider from react-redux or the relevant library
+import { Provider } from "react-redux";
 import { makeStore, AppStore } from "../lib/store";
+import { SessionProvider } from "next-auth/react";
+import type { Session } from "next-auth";
 
-// Define a type for pages that can optionally include a getLayout function
 type NextPageWithLayout = FC & {
   getLayout?: (page: ReactNode) => ReactNode;
 };
 
-// Extend AppProps to include pages that might have the getLayout function
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
+  pageProps: {
+    session?: Session;
+    [key: string]: any;
+  };
 };
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppPropsWithLayout) {
   const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
     storeRef.current = makeStore();
@@ -23,8 +30,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <Provider store={storeRef.current}>
-      {getLayout(<Component {...pageProps} />)}
-    </Provider>
+    <SessionProvider session={session}>
+      <Provider store={storeRef.current}>
+        {getLayout(<Component {...pageProps} />)}
+      </Provider>
+    </SessionProvider>
   );
 }

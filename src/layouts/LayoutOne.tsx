@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/lib/hooks";
 import { useRouter } from "next/router";
 import genres from "../staticData/generes.json";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const LayoutOne = ({ children }: { children: ReactNode }) => {
+  const { data: session } = useSession();
   let isOpen = useAppSelector((state) => state.sideBar.isOpen);
   let router = useRouter();
   return (
@@ -100,9 +102,12 @@ const TopBar = () => {
         <Button
           size="sm"
           className="relative inline-block h-[30px] font-bold text-white bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent rounded-md overflow-hidden"
+          onClick={() => {
+            signIn();
+          }}
         >
           <span className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient-background"></span>
-          <span className="relative text-white">Sign In</span>
+          <span className="relative text-white">Github</span>
         </Button>
       </div>
     </div>
