@@ -10,6 +10,7 @@ import { MdExplore } from "react-icons/md";
 import { sideBarActions } from "@/store/SideBarSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { PiWaveformBold } from "react-icons/pi";
+import { BsMusicPlayerFill } from "react-icons/bs";
 
 import Link from "next/link";
 import { motion, useAnimationControls } from "framer-motion";
@@ -60,9 +61,11 @@ export const NavItems = [
     link: "/search",
   },
   {
-    icon: <MdExplore className="text-2xl ml-[5px] mr-3  min-w-[50px]" />,
-    text: "Browse",
-    link: "/track",
+    icon: (
+      <BsMusicPlayerFill className="text-2xl ml-[5px] mr-3  min-w-[50px]" />
+    ),
+    text: "Player",
+    link: "/player",
   },
   {
     icon: <PiPlaylistBold className="text-2xl ml-[5px] mr-3  min-w-[50px]" />,

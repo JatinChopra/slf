@@ -52,7 +52,6 @@ const AudioControlBar = () => {
     const handleTimeUpdate = () => {
       if (audioPlayer && sliderRef.current) {
         // setCurrent(audioPlayer.currentTime);
-        console.log("Set current called by handletimeupdate useeffect hook");
         dispatch(acActions.setCurrent(audioPlayer.currentTime));
         // Set slider value if it's not already being interacted with
         (sliderRef.current as any).value = audioPlayer.currentTime;

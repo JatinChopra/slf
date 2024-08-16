@@ -26,7 +26,7 @@ const LayoutOne = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <div
-        className="bgyellow-500 bgblack bg[#242431] bg[#1f162f] bg-[#1A1A1E] bg[url(/bg.png)] bgcover
+        className="bgyellow-500 bgblack bg[#242431] bg[#1f162f] bg-[#1A1A1E] bg-hite bg[url(/bg.png)] bgcover
       backdrop-blur-md pt-5 pb- flex h-[100vh] justify-start overflow-hidden pr-10 "
       >
         {/* serch bar container */}

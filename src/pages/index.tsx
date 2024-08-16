@@ -342,6 +342,7 @@ const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
   let { src, current, duration, isPlaying, songIndex } = useAppSelector(
     (state) => state.audioController
   );
+  const router = useRouter();
 
   return (
     <div
@@ -383,10 +384,15 @@ const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
         </div>
 
         {/* The text background container */}
-        <div className="absolute bottom-0 ronded-lg text-white px-5 py-5 bg-gradient-to-t from-black via-transparent to-transparent w-full left-0">
-          <div className="relative bggreen-500 w-full h-10 overflow-clip">
+        <div className="absolute bottom-0  ronded-lg text-white px-5 py-5 bg-gradient-to-t from-black via-transparent to-transparent w-full left-0">
+          <div
+            className="relative bggreen-500 w-full h-10 overflow-clip"
+            onClick={() => {
+              router.push("/player");
+            }}
+          >
             <div
-              className={` flex mb-[-40px] transition-transform flex-col duration-700 ease-in-out  bg-ink-500 ${
+              className={` flex mb-[-40px] cursor-pointer transition-transform flex-col duration-700 ease-in-out  bg-ink-500 ${
                 hovered
                   ? "transform translate-y-[-50%]"
                   : "transform translate-y-0"

@@ -37,10 +37,27 @@ export const submitComment = createAsyncThunk<
       `${process.env.NEXT_PUBLIC_API}/comment/add`,
       comment
     );
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.response?.data || "Something went wrong");
+  }
+});
+
+// Async thunk for fetching comments for a particular song
+export const fetchComments = createAsyncThunk<
+  Comment[],
+  string,
+  { rejectValue: string }
+>("comments/fetchComments", async (songId, { rejectWithValue }) => {
+  try {
+    const response = await axios.get<Comment[]>(
+      `${process.env.NEXT_PUBLIC_API}/comment/${songId}`
+    );
+    console.log("got this back in thunk");
+    console.log(response.data);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data || "Failed to fetch comments");
   }
 });
 
@@ -49,7 +66,6 @@ const commentsSlice = createSlice({
   initialState,
   reducers: {
     addComment(state, action: PayloadAction<Comment>) {
-      console.log("Add comment called");
       state.comments.push(action.payload);
     },
   },
@@ -71,6 +87,24 @@ const commentsSlice = createSlice({
         (state, action: PayloadAction<string | undefined>) => {
           state.loading = false;
           state.error = action.payload || "Failed to submit comment";
+        }
+      )
+      .addCase(fetchComments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchComments.fulfilled,
+        (state, action: PayloadAction<Comment[]>) => {
+          state.loading = false;
+          state.comments = action.payload;
+        }
+      )
+      .addCase(
+        fetchComments.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.error = action.payload || "Failed to fetch comments";
         }
       );
   },
