@@ -15,6 +15,7 @@ import { metaDataSchema } from "@/store/SongDataSlice";
 import { IoMdCalendar, IoMdHeart, IoMdPeople, IoMdPlay } from "react-icons/io";
 import { PiWaveformBold } from "react-icons/pi";
 import Link from "next/link";
+import { arrayBuffer } from "stream/consumers";
 
 const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
   const router = useRouter();

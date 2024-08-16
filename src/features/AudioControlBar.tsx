@@ -47,8 +47,6 @@ const AudioControlBar = () => {
   useEffect(() => {
     const audioPlayer = audioRef.current;
 
-    console.log("in state" + current);
-    console.log("in player" + audioPlayer?.currentTime);
     const handleTimeUpdate = () => {
       if (audioPlayer && sliderRef.current) {
         // setCurrent(audioPlayer.currentTime);

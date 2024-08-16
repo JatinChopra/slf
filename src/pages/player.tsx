@@ -12,6 +12,7 @@ import { commentSliceActions } from "@/store/CommentsSlice";
 import { fetchComments } from "@/store/CommentsSlice";
 import { submitComment } from "@/store/CommentsSlice";
 import { Comment } from "@/store/CommentsSlice";
+import { useRouter } from "next/router";
 const Player = () => {
   let audiourl = useAppSelector((state) => state.audioController.src);
   let dispatch = useAppDispatch();
@@ -31,15 +32,25 @@ const Player = () => {
     id,
   } = useAppSelector((state) => state.audioController);
   const { data: session } = useSession();
+  const router = useRouter();
 
+  const audioEl = useRef<HTMLAudioElement | null>(null);
   const commentsData = useAppSelector((state) => state.comment.comments);
-  let audioEl = document.getElementById("audioPlayer1") as HTMLAudioElement;
   let filteredComments = commentsData.filter((item, idx) => {
     return item.songId == id;
   });
 
+  useEffect(() => {
+    if (!src) router.push("/");
+  }, []);
   // console.log(id);
   useEffect(() => {
+    if (typeof window !== undefined) {
+      let audioElem = document.getElementById(
+        "audioPlayer1"
+      ) as HTMLAudioElement;
+      audioEl.current = audioElem;
+    }
     console.log("calling the thunk");
     if (id) {
       dispatch(fetchComments(id));
@@ -74,7 +85,7 @@ const Player = () => {
                   <FaPause
                     className="text-white text-2xl ml-auto mr-5 mt-10 cursor-pointer"
                     onClick={() => {
-                      audioEl && audioEl.pause();
+                      audioEl && audioEl.current?.pause();
                       dispatch(acActions.setIsPlaying(false));
                     }}
                   />
@@ -82,7 +93,7 @@ const Player = () => {
                   <FaPlay
                     className="text-white text-2xl ml-auto mr-5 mt-10 cursor-pointer"
                     onClick={() => {
-                      audioEl && audioEl.play();
+                      audioEl && audioEl.current?.play();
                       dispatch(acActions.setIsPlaying(true));
                     }}
                   />
@@ -164,59 +175,64 @@ const Player = () => {
         </div>
         <div className="wfull p-2 mt-[380px] bg-whte bggreen-500   z-30  w-full md:w-full lg:w-[95%] lg:px-12">
           <div className="w-full flex">
-            <div className="flex bgpink-500 w-full ">
-              <img src={session?.user?.image || "#"} className="h-10 w-10" />
-              {commentTime && (
-                <div className="bg-white px-1 flex items-center">
-                  <p className="w-12 text-center text-sm font-bold text-white bg-black rounded-md px-1 my-auto max-h-5">
-                    {formatDuration(commentTime)}
-                  </p>
-                </div>
-              )}
-              <Input
-                value={commentText}
-                onChange={(e) => {
-                  setCommentText(e.target.value);
-                }}
-                className="   h-10  sm:w-[420px] lg:w-[520px] rounded-none"
-                placeholder="Comment"
-                onFocus={() => {
-                  console.log("got focus");
-                  console.log(current);
-                  setCommentTime(current - 0.4);
-                }}
-              />
-              <Button
-                variant="secondary"
-                className="ml-5"
-                onClick={async () => {
-                  // create a new object
-                  // add it to the state
-                  if (session) {
-                    let commentObj: Comment = {
-                      userId: session?.user?.email as string,
-                      text: commentText as string,
-                      img: session?.user?.image as string,
-                      username: session?.user?.name as string,
-                      songId: id,
-                      timestamp: commentTime as number,
-                    };
+            {session && (
+              <div className="flex bgpink-500 w-full ">
+                <img
+                  src={session?.user?.image || "/dummy_dp.png"}
+                  className="h-10 w-10"
+                />
+                {commentTime && (
+                  <div className="bg-white px-1 flex items-center">
+                    <p className="w-12 text-center text-sm font-bold text-white bg-black rounded-md px-1 my-auto max-h-5">
+                      {formatDuration(commentTime)}
+                    </p>
+                  </div>
+                )}
+                <Input
+                  value={commentText}
+                  onChange={(e) => {
+                    setCommentText(e.target.value);
+                  }}
+                  className="   h-10  sm:w-[420px] lg:w-[520px] rounded-none"
+                  placeholder="Comment"
+                  onFocus={() => {
+                    console.log("got focus");
+                    console.log(current);
+                    setCommentTime(current - 0.4);
+                  }}
+                />
+                <Button
+                  variant="secondary"
+                  className="ml-5"
+                  onClick={async () => {
+                    // create a new object
+                    // add it to the state
+                    if (session) {
+                      let commentObj: Comment = {
+                        userId: session?.user?.email as string,
+                        text: commentText as string,
+                        img: session?.user?.image as string,
+                        username: session?.user?.name as string,
+                        songId: id,
+                        timestamp: commentTime as number,
+                      };
 
-                    // reset the commentTime
-                    setCommentTime(undefined);
-                    setCommentText("");
-                    console.log("new comment object prepared. ");
-                    console.log(commentObj);
-                    dispatch(commentSliceActions.addComment(commentObj));
-                    await dispatch(submitComment(commentObj));
-                  } else {
-                    alert("Please sign in first.");
-                  }
-                }}
-              >
-                Comment
-              </Button>
-            </div>
+                      // reset the commentTime
+                      setCommentTime(undefined);
+                      setCommentText("");
+                      console.log("new comment object prepared. ");
+                      console.log(commentObj);
+                      dispatch(commentSliceActions.addComment(commentObj));
+                      await dispatch(submitComment(commentObj));
+                    } else {
+                      alert("Please sign in first.");
+                    }
+                  }}
+                >
+                  Comment
+                </Button>
+              </div>
+            )}
           </div>
           <div className="bgorange-500 text-white poppins-semibold lg:w-[50%]">
             <div className="border-b-2 content-center  mt-5 h-10">
@@ -225,7 +241,10 @@ const Player = () => {
                 <div className="bgyellow-500 over">
                   {filteredComments.map((item, idx) => {
                     return (
-                      <div className="bggray-500 gap-4 w-full min-h-16 flex mt-4 items-center p-2">
+                      <div
+                        key={item.id + "comment" + idx}
+                        className="bggray-500 gap-4 w-full min-h-16 flex mt-4 items-center p-2"
+                      >
                         <div className="w-14 h-14 rounded-full ">
                           <img
                             src={item.img}
