@@ -350,6 +350,7 @@ const SongCard3 = ({ item, idx }: { item: metaDataSchema; idx: number }) => {
       onMouseLeave={() => setHovered(false)}
       onClick={() => {
         let songid = item._id;
+        dispatch(acActions.setSongId(item._id));
         dispatch(acActions.setDuration(item.duration));
         dispatch(acActions.setImage(item.image));
         dispatch(acActions.setSongName(item.attributes[1].value));

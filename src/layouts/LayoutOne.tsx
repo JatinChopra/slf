@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import AudioControlBar from "@/features/AudioControlBar";
 import SideBar from "@/features/SideBar";
@@ -9,9 +9,18 @@ import { useAppSelector } from "@/lib/hooks";
 import { useRouter } from "next/router";
 import genres from "../staticData/generes.json";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { FaGithub } from "react-icons/fa";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const LayoutOne = ({ children }: { children: ReactNode }) => {
-  const { data: session } = useSession();
   let isOpen = useAppSelector((state) => state.sideBar.isOpen);
   let router = useRouter();
   return (
@@ -81,6 +90,8 @@ const GenresHorizontalScroller = () => {
 };
 
 const TopBar = () => {
+  const { data: session } = useSession();
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   return (
     <div className="fixed  flex pl-[80px] flex-nowrap items-center justify-between top-0 h-[56px] bggreen-500 pr-[40px] opacity20 z-40 border-b-[1px] border-neutral-700  content-center w-full  lg:w-full">
       <div className="flex item-center gap-2">
@@ -93,22 +104,54 @@ const TopBar = () => {
         <div className="relative flex items-center  md:min-w-[320px] h-[35px] ml-5 ">
           <FaSearch className="text-neutral-600 absolute left-5  " />
           <Input
-            className="rounded-lg border-transparent focus:border-1 focus:border-purple-500 bg-neutral-900 pl-12  placeholder:text-neutral-600  h-[35px] placeholder:text-sm  max-w-[650px]  text-gray-300 text-sm "
+            className="rounded-lg border-transparent focus:border-1 focus:border-purple-500 bg-neutral-800 pl-12  placeholder:text-neutral-600  h-[35px] placeholder:text-sm  max-w-[650px]  text-gray-300 text-sm "
             placeholder="Search by artist, song or album"
           />
         </div>
       </div>
       <div>
-        <Button
-          size="sm"
-          className="relative inline-block h-[30px] font-bold text-white bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent rounded-md overflow-hidden"
-          onClick={() => {
-            signIn();
-          }}
-        >
-          <span className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient-background"></span>
-          <span className="relative text-white">Github</span>
-        </Button>
+        {session ? (
+          <>
+            <DropdownMenu
+              open={menuOpen}
+              onOpenChange={(val: boolean) => {
+                setMenuOpen(val);
+              }}
+            >
+              <DropdownMenuTrigger className="cursor-pointer">
+                <img
+                  src={session.user?.image || "#"}
+                  className="h-10 w-10 cursor-pointer border-white border-2 mb-[-5px]"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuItem>{session.user?.email}</DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    signOut();
+                  }}
+                >
+                  {"Logout"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        ) : (
+          <Button
+            size="sm"
+            className="relative inline-block h-[30px] font-bold text-white bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent rounded-md overflow-hidden"
+            onClick={() => {
+              signIn();
+            }}
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient-background"></span>
+            <div className="relative text-white flex items-center gap-2">
+              <FaGithub className="text-2xl" /> Sign In with Github
+            </div>
+          </Button>
+        )}
       </div>
     </div>
   );

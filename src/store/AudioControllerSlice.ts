@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { metaDataSchema } from "./SongDataSlice";
 interface AudioControllerState {
+  id: string;
   songName: string;
   artistName: string;
   songIndex: number;
@@ -14,6 +15,7 @@ interface AudioControllerState {
 }
 
 const initialState: AudioControllerState = {
+  id: "",
   songName: "",
   artistName: "",
   songIndex: 0,
@@ -29,6 +31,10 @@ const audioControllerSlice = createSlice({
   name: "audioController",
   initialState,
   reducers: {
+    setSongId(state, action: PayloadAction<string>) {
+      console.log("form the state");
+      state.id = action.payload;
+    },
     setSongIndex(state, action: PayloadAction<number>) {
       console.log("form the state");
       state.songIndex = action.payload;

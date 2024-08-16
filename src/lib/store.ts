@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import audioControllerReducer from "@/store/AudioControllerSlice";
 import sideBarReducer from "@/store/SideBarSlice";
 import SongDataReducer from "@/store/SongDataSlice";
+import CommentReducer from "@/store/CommentsSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -11,6 +12,7 @@ export const makeStore = () => {
       audioController: audioControllerReducer,
       sideBar: sideBarReducer,
       songData: SongDataReducer,
+      comment: CommentReducer,
     },
   });
 };

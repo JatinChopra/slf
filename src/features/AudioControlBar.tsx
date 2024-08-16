@@ -91,11 +91,12 @@ const AudioControlBar = () => {
     }
   }
   function startStreaming(data: metaDataSchema) {
-    dispatch(acActions.setDuration(duration));
+    dispatch(acActions.setDuration(data.duration));
     dispatch(
       acActions.setSrc(`${process.env.NEXT_PUBLIC_API}/play/${data._id}`)
     );
     dispatch(acActions.setIsPlaying(true));
+    dispatch(acActions.setSongId(data._id));
 
     dispatch(acActions.setImage(data.image));
     dispatch(acActions.setSongName(data.attributes[1].value));
