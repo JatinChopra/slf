@@ -74,6 +74,7 @@ const Upload = () => {
 
     let metaData = {
       name: songName + " by " + artistName, // Replace with your actual title
+      visibile: false,
       description: "Description of the NFT", // Replace with your actual description
       image: `https://gateway.pinata.cloud/ipfs/${imagePtr.IpfsHash}`,
       animation_url: `https://gateway.pinata.cloud/ipfs/${audioPtr.IpfsHash}`,
@@ -196,6 +197,7 @@ const Upload = () => {
       // make a console log
       console.log(audioPointer.IpfsHash);
       console.log(imagePointer.IpfsHash);
+      setisuploading(() => false);
     } catch (_e) {
       let e: Error = _e as Error;
       toast({
@@ -278,7 +280,7 @@ const Upload = () => {
   }
 
   return (
-    <div className="text-xl text-white max-w-[700px] mx-auto bggreen-500 p-5 gap-5 w-[95%] mt-10 flex flex-col">
+    <div className="text-xl text-[#232323] max-w-[700px] mx-auto bggreen-500 p-5 gap-5 w-[95%] mt-10 flex flex-col">
       {/* drop handler for audio */}
       <div
         className="bg-ink-500 w-full h-[280px] border-[5px] rounded-lg border-dashed border-purple-700  border-opacity-[98%] bg-white bg-opacity-[15%] content-center flex items-stretch justify-center"
@@ -335,7 +337,7 @@ const Upload = () => {
 
       <Button
         variant="secondary"
-        className="sm:w-[32%] font-bold min-w-[280px] relative flex items-center justify-center overflow-hidden"
+        className="sm:w-[32%] hover:bg-[#232323] bg-[#111111] font-bold min-w-[280px] relative flex items-center justify-center overflow-hidden"
         onClick={() => {
           setisuploading(true);
           if (audioFile && imageFile && artistName && songName) {
@@ -360,7 +362,7 @@ const Upload = () => {
 
       <Button
         variant="secondary"
-        className="sm:w-[32%]   font-bold min-w-[280px]
+        className="sm:w-[32%] hover:bg-[#232323] bg-[#111111] font-bold min-w-[280px]
         "
         onClick={() => {
           setisminting(true);

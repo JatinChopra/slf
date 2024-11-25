@@ -1,5 +1,5 @@
 const Browse = () => {
-  return <>Nothing Here</>;
+  return <div>Nothing here </div>;
 };
 
 export default Browse;

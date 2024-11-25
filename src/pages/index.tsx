@@ -100,7 +100,7 @@ const Home = ({ data }: { data: metaDataSchema[] | [] }) => {
         <div className="flex-grow overflow-x-hidden bgpurple-500 scrollbar-hide mb-[195px]">
           {/* Section 1 */}
           <Banners />
-          <p className="bggreen-500  text-white font-bold text-2xl mt-7">
+          <p className="bggreen-500  text-[#262626] font-bold text-2xl mt-7">
             Recommendations for you
           </p>
           <HorizontalSongsScroller data={data} />
@@ -147,7 +147,7 @@ const SideBarCard = ({ type }: { type: "artists" | "history" }) => {
   return (
     <>
       {/* heading */}
-      <div className="bgyellow-500 border-bottom-[1px] mb-2 h-[40px] content-end px-2 py-1 text-lg text-white">
+      <div className="bgyellow-500 border-bottom-[1px] mb-2 h-[40px] content-end px-2 py-1 text-lg text-[#232323]">
         {type == "artists" ? (
           <div className="border-b-[1px] pb-2 flex justify-between  border-gray-400">
             {" "}
@@ -196,10 +196,10 @@ const HistorySideBarCardItem = ({ index }: { index: number }) => {
         className="b-pink-500 w-[70px] h-[70px] bg-cover "
       />
       <div className="bg-ellow-500 w-3/4">
-        <div className="w-full truncate font-semibold text-gray-300 ">
+        <div className="w-full truncate font-semibold text-gray-700 ">
           Artist Singer
         </div>
-        <div className="w-full truncate text-lg text-white">
+        <div className="w-full truncate text-lg text-[#232323]">
           Song Name Goes Here What do you say
         </div>
         <div className="flex text-gray-400 gap-2">
@@ -225,7 +225,7 @@ const ArtistSideBarCardItem = ({ index }: { index: number }) => {
         src="https://picsum.photos/200"
         className="b-pink-500 w-[60px] h-[60px] bg-cover rounded-full"
       />
-      <div className="bgyellow-500 w-2/4 text-white">
+      <div className="bgyellow-500 w-2/4 text-[#232323]">
         <div className="w-[88%] truncate text-lg ">
           Artist Name Goes Here What do you say
         </div>

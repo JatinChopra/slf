@@ -222,7 +222,7 @@ const Player = () => {
                       setCommentText("");
                       console.log("new comment object prepared. ");
                       console.log(commentObj);
-                      dispatch(commentSliceActions.addComment(commentObj));
+                      // dispatch(commentSliceActions.addComment(commentObj));
                       await dispatch(submitComment(commentObj));
                     } else {
                       alert("Please sign in first.");
@@ -234,9 +234,9 @@ const Player = () => {
               </div>
             )}
           </div>
-          <div className="bgorange-500 text-white poppins-semibold lg:w-[50%]">
+          <div className="bgorange-500 text-[#232323] poppins-semibold lg:w-[50%]">
             <div className="border-b-2 content-center  mt-5 h-10">
-              <p className="text-xl">Comments</p>
+              <p className="text-xl ">Comments</p>
               {
                 <div className="bgyellow-500 over">
                   {filteredComments.map((item, idx) => {
